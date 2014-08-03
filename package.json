@@ -1,0 +1,24 @@
+{
+  "name": "wooden-labyrinth",
+  "description": "A wooden labyrinth game implemented in HTML5.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Daniel \"MaTachi\" Jonsson",
+    "url": "http://matachi.se"
+  },
+  "homepage": "http://matachi.se",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MaTachi/wooden-labyrinth-game"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.7",
+    "gulp-connect": "^2.0.6",
+    "gulp-download": "0.0.1",
+    "gulp-jsdoc": "^0.1.4",
+    "gulp-jshint": "^1.8.3",
+    "gulp-load-plugins": "^0.5.3"
+  },
+  "private": true
+}

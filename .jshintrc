@@ -1,0 +1,29 @@
+{
+  // Environment options
+  "browser": true,
+  "node": true, // To lint gulpfile.js
+  "globals": {
+    "THREE": false,
+    "_": false,
+    "define": false
+  },
+
+  // Enforcing options
+  "bitwise": true,
+  "camelcase": true,
+  "curly": true,
+  "eqeqeq": true,
+  "immed": true,
+  "indent": 2,
+  "latedef": true,
+  "newcap": true,
+  "noarg": true,
+  "noempty": true,
+  "quotmark": "single",
+  "undef": true,
+  "unused": true,
+  "strict": true,
+
+  // Relaxing options
+  "esnext": true
+}
