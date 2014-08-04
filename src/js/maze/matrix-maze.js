@@ -2,7 +2,7 @@ define(['lodash'], function(_) {
   'use strict';
 
   /**
-  * @module maze
+  * @module maze/matrix-maze
   */
   var exports = {
 
