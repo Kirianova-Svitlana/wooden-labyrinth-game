@@ -1,9 +1,8 @@
+/**
+ * @module
+ */
 define(['lodash'], function(_) {
   'use strict';
-
-  /**
-  * @module maze/matrix-maze
-  */
   var exports = {
 
     /**
@@ -137,7 +136,8 @@ define(['lodash'], function(_) {
      * Generate a maze.
      *
      * @public
-     * @param {Object} [args={width: 10, height: 10, start: {x: 0, y: 0}, print: false}] Arguments object.
+     * @param {Object} [args={width: 10, height: 10, start: {x: 0, y: 0}, print: false}]
+     *   Arguments object.
      * @returns {Array<Array<Object>>} A maze matrix of objects with an
      *   attribute `wall` that is either true or false.
      */

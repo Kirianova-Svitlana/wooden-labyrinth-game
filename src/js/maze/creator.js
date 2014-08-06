@@ -1,9 +1,13 @@
-define(['lodash', 'maze/matrix-maze'], function(_, matrixMaze) {
+/**
+ * @module
+ */
+define([
+  'lodash',
+  './matrixMaze',
+  './longestPathFinder'
+], function(_, matrixMaze, longestPathFinder) {
   'use strict';
 
-  /**
-  * @module maze/creator
-  */
   var exports = {
 
     /**
@@ -126,8 +130,9 @@ define(['lodash', 'maze/matrix-maze'], function(_, matrixMaze) {
       var maze = matrixMaze.generate(
         _.pick(args, ['width', 'height', 'start', 'print'])
       );
+      var exitPath = longestPathFinder.find(maze, start);
       var walls = this.__extractWalls(maze);
-      return {walls: walls, start: start};
+      return {walls: walls, start: start, exitPath: exitPath};
     },
   };
 

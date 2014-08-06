@@ -42,6 +42,14 @@ require([
     scene.add(cube);
   });
 
+  _.forEach(mazeComponents.exitPath, function(wall) {
+    var gemoetry = new THREE.BoxGeometry(1, 1, 1);
+    var material = new THREE.MeshPhongMaterial({color: 0x0000ff});
+    var cube = new THREE.Mesh(gemoetry, material);
+    cube.position.set(wall.x + 0.5, wall.y + 0.5, -1);
+    scene.add(cube);
+  });
+
   var gemoetry = new THREE.SphereGeometry(0.5, 32, 32);
   var material = new THREE.MeshPhongMaterial({color: 0xff0000});
   var ball = new THREE.Mesh(gemoetry, material);
