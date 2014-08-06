@@ -17,7 +17,8 @@ require([
   'three',
   'lodash',
   'maze/creator',
-], function(THREE, _, maze) {
+  'input/Key',
+], function(THREE, _, maze, KeyInput) {
 
   var canvas = document.getElementById('canvas');
 
@@ -46,28 +47,24 @@ require([
   var ball = new THREE.Mesh(gemoetry, material);
   ball.position.set(0.5, 0.5, 0);
   scene.add(ball);
-  console.dir(ball);
 
   camera.position.set(4.5, 4.5, 10);
 
-  window.addEventListener('keydown', function(event) {
-    switch (event.keyCode) {
-      case 37:
-        --ball.position.x;
-        break;
-      case 38:
-        ++ball.position.y;
-        break;
-      case 39:
-        ++ball.position.x;
-        break;
-      case 40:
-        --ball.position.y;
-        break;
-    }
-  }, false);
+  var keyInput = new KeyInput();
 
   function render() {
+    if (keyInput.isDown(keyInput.LEFT)) {
+      --ball.position.x;
+    }
+    if (keyInput.isDown(keyInput.UP)) {
+      ++ball.position.y;
+    }
+    if (keyInput.isDown(keyInput.RIGHT)) {
+      ++ball.position.x;
+    }
+    if (keyInput.isDown(keyInput.DOWN)) {
+      --ball.position.y;
+    }
     requestAnimationFrame(render);
     renderer.render(scene, camera);
 
