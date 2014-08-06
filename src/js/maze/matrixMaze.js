@@ -38,7 +38,7 @@ define(['lodash'], function(_) {
     __createMaze: function(matrix, start) {
       matrix[start.y][start.x].wall = false;
       var randomNeighborCell = _.sample(
-        this.__getCellNeighbors(matrix, start.y, start.x)
+        this.getCellNeighbors(matrix, start.y, start.x)
       );
       this.__removeWall(
         matrix, randomNeighborCell.y, randomNeighborCell.x
@@ -56,7 +56,7 @@ define(['lodash'], function(_) {
      * @see {@link module:maze.__createMaze}
      */
     __removeWall: function(matrix, y, x) {
-      var neighbors = this.__getCellNeighbors(matrix, y, x);
+      var neighbors = this.getCellNeighbors(matrix, y, x);
       var wallNeighbors = _.filter(neighbors, function(neighbor) {
         return matrix[neighbor.y][neighbor.x].wall;
       });
@@ -78,14 +78,13 @@ define(['lodash'], function(_) {
     /**
      * Get a list with the neighbors of a cell.
      *
-     * @private
      * @param {Array<Array<Object>>} matrix A maze matrix.
      * @param {Number} y Y coordinate.
      * @param {Number} x X coordinate.
      * @returns {Array<Object>} A list with 2, 3 or 4 objects with the
      *   attributes x or y.
      */
-    __getCellNeighbors: function(matrix, y, x) {
+    getCellNeighbors: function(matrix, y, x) {
       var neighbors = [];
       if (y > 0) {
         neighbors.push({y: y - 1, x: x});

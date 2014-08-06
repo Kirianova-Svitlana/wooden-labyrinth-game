@@ -38,7 +38,7 @@ define([
     var lastPathCell = path[path.length - 1];
     var y = lastPathCell.y,
         x = lastPathCell.x;
-    var neighborCells = matrixMaze.__getCellNeighbors(maze, y, x);
+    var neighborCells = matrixMaze.getCellNeighbors(maze, y, x);
     var unvisitedFloorNeighborCells = _.filter(neighborCells, function(cell) {
       // Mark the cell as visited in the maze
       var mazeCell = maze[cell.y][cell.x];
