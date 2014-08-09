@@ -117,10 +117,9 @@ define(['lodash'], function(_) {
     *   --#---#-#-
     *   #---#---#-
     *
-    * @private
     * @param {Array<Array<Object>>} matrix A maze matrix.
     */
-    __printMatrix: function(matrix) {
+    printMatrix: function(matrix) {
       var output = '\n';
       _.each(matrix, function(row, i) {
         _.each(row, function(cell, j) {
@@ -154,7 +153,7 @@ define(['lodash'], function(_) {
       var matrix = this.__createEmptyMatrix(10, 10, {wall: true});
       this.__createMaze(matrix, args.start);
       if (args.print) {
-        this.__printMatrix(matrix);
+        this.printMatrix(matrix);
       }
       return matrix;
     }
