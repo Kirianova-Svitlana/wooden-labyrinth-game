@@ -5,10 +5,14 @@ require.config({
   paths: {
     three: '../lib/three.min',
     lodash: '../lib/lodash.min',
+    box2d: '../lib/box2d',
   },
   shim: {
     three: {
       exports: 'THREE',
+    },
+    box2d: {
+      exports: 'Box2D',
     },
   },
 });
@@ -18,7 +22,9 @@ require([
   'lodash',
   'maze/creator',
   'input/Key',
-], function(THREE, _, maze, KeyInput) {
+  'box2d',
+  'model/Game',
+], function(THREE, _, maze, KeyInput, Box2D, Model) {
 
   var canvas = document.getElementById('canvas');
 
@@ -34,12 +40,21 @@ require([
 
   var mazeComponents = maze.create();
 
+  var model = new Model();
+  var ball2 = model.createBall({radius: 0.125, x: 0, y: 0});
+
   _.forEach(mazeComponents.walls, function(wall) {
     var gemoetry = new THREE.BoxGeometry(wall.width, wall.height, 1);
     var material = new THREE.MeshPhongMaterial({color: 0x00ff00});
     var cube = new THREE.Mesh(gemoetry, material);
     cube.position.set(wall.x + wall.width / 2, wall.y + wall.height / 2, 0);
     scene.add(cube);
+    model.createWall({
+      x: wall.x + wall.width / 2,
+      y: wall.y + wall.height / 2,
+      width: wall.width,
+      height: wall.height,
+    });
   });
 
   _.forEach(mazeComponents.exitPath, function(wall) {
@@ -50,17 +65,22 @@ require([
     scene.add(cube);
   });
 
-  var gemoetry = new THREE.SphereGeometry(0.5, 32, 32);
+  var gemoetry = new THREE.SphereGeometry(0.125, 32, 32);
   var material = new THREE.MeshPhongMaterial({color: 0xff0000});
   var ball = new THREE.Mesh(gemoetry, material);
   ball.position.set(0.5, 0.5, 0);
   scene.add(ball);
 
-  camera.position.set(4.5, 4.5, 10);
+  camera.position.set(5, 5, 8);
 
   var keyInput = new KeyInput();
 
   function render() {
+    requestAnimationFrame(render);
+    model.step(1/60);
+    var bpos = ball2.GetPosition();
+    ball.position.x = bpos.get_x() / 10;
+    ball.position.y = bpos.get_y() / 10;
     if (keyInput.isDown(keyInput.LEFT)) {
       --ball.position.x;
     }
@@ -73,11 +93,7 @@ require([
     if (keyInput.isDown(keyInput.DOWN)) {
       --ball.position.y;
     }
-    requestAnimationFrame(render);
     renderer.render(scene, camera);
-
-    ball.rotation.x += 0.01;
-    ball.rotation.y += 0.01;
   }
 
   render();

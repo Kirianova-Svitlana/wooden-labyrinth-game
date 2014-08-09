@@ -25,6 +25,7 @@ gulp.task('downloadDependencies', function() {
   plugins.download([
     'http://threejs.org/build/three.min.js',
     'https://raw.githubusercontent.com/lodash/lodash/2.4.1/dist/lodash.min.js',
+    'https://raw.githubusercontent.com/kripken/box2d.js/master/box2d.js',
     'http://requirejs.org/docs/release/2.1.14/minified/require.js',
   ]).pipe(gulp.dest('dist/lib'));
 });
