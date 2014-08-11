@@ -30,13 +30,14 @@ require([
 
   var scene = new THREE.Scene();
   var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+  var group = new THREE.Object3D();
 
   var renderer = new THREE.WebGLRenderer({canvas: canvas});
   renderer.setSize(window.innerWidth, window.innerHeight);
 
   var light = new THREE.DirectionalLight(0xffffff, 1.5);
   light.position.set(4.5, 4.5, 10);
-  scene.add(light);
+  group.add(light);
 
   var mazeComponents = maze.create();
 
@@ -47,8 +48,8 @@ require([
     var gemoetry = new THREE.BoxGeometry(wall.width, wall.height, 1);
     var material = new THREE.MeshPhongMaterial({color: 0x00ff00});
     var cube = new THREE.Mesh(gemoetry, material);
-    cube.position.set(wall.x + wall.width / 2, wall.y + wall.height / 2, 0);
-    scene.add(cube);
+    cube.position.set(wall.x + wall.width / 2 - 5, wall.y + wall.height / 2 - 5, 0);
+    group.add(cube);
     model.createWall({
       x: wall.x + wall.width / 2,
       y: wall.y + wall.height / 2,
@@ -61,38 +62,51 @@ require([
     var gemoetry = new THREE.BoxGeometry(1, 1, 1);
     var material = new THREE.MeshPhongMaterial({color: 0x0000ff});
     var cube = new THREE.Mesh(gemoetry, material);
-    cube.position.set(wall.x + 0.5, wall.y + 0.5, -1);
-    scene.add(cube);
+    cube.position.set(wall.x + 0.5 - 5, wall.y + 0.5 - 5, -1);
+    group.add(cube);
   });
 
   var gemoetry = new THREE.SphereGeometry(0.125, 32, 32);
   var material = new THREE.MeshPhongMaterial({color: 0xff0000});
   var ball = new THREE.Mesh(gemoetry, material);
-  ball.position.set(0.5, 0.5, 0);
-  scene.add(ball);
+  ball.position.set(0.5 - 5, 0.5 - 5, 0);
+  group.add(ball);
 
-  camera.position.set(5, 5, 8);
+  scene.add(group);
+  camera.position.set(0, 0, 8);
 
   var keyInput = new KeyInput();
 
   function render() {
     requestAnimationFrame(render);
-    model.step(1/60);
+
     var bpos = ball2.GetPosition();
-    ball.position.x = bpos.get_x() / 10;
-    ball.position.y = bpos.get_y() / 10;
+    ball.position.x = bpos.get_x() / 10 - 5;
+    ball.position.y = bpos.get_y() / 10 - 5;
+
     if (keyInput.isDown(keyInput.LEFT)) {
-      --ball.position.x;
+      model.tiltLeft();
+      group.rotation.y = -Math.PI / 20;
+    } else if (keyInput.isDown(keyInput.RIGHT)) {
+      model.tiltRight();
+      group.rotation.y = Math.PI / 20;
+    } else {
+      model.releaseHorizontalTilt();
+      group.rotation.y = 0;
     }
     if (keyInput.isDown(keyInput.UP)) {
-      ++ball.position.y;
+      model.tiltUp();
+      group.rotation.x = -Math.PI / 20;
+    } else if (keyInput.isDown(keyInput.DOWN)) {
+      model.tiltDown();
+      group.rotation.x = Math.PI / 20;
+    } else {
+      model.releaseVerticalTilt();
+      group.rotation.x = 0;
     }
-    if (keyInput.isDown(keyInput.RIGHT)) {
-      ++ball.position.x;
-    }
-    if (keyInput.isDown(keyInput.DOWN)) {
-      --ball.position.y;
-    }
+
+    model.step(1/60);
+
     renderer.render(scene, camera);
   }
 

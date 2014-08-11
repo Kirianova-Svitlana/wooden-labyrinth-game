@@ -14,6 +14,8 @@ define(['box2d'], function(Box2D) {
     this.walls = [];
     var gravity = new Box2D.b2Vec2(0.0, 0.0);
     this.world = new Box2D.b2World(gravity);
+    this.horizontalTilt = 0;
+    this.verticalTilt = 0;
   };
 
   /**
@@ -72,13 +74,11 @@ define(['box2d'], function(Box2D) {
     var fixtureDef = new Box2D.b2FixtureDef();
     fixtureDef.set_shape(shape);
     fixtureDef.set_density(5.0);
-    fixtureDef.set_restitution(1.0);
+    fixtureDef.set_restitution(0.0);
     body.CreateFixture(fixtureDef);
     body.SetLinearVelocity(new Box2D.b2Vec2(20, 10));
 
-    this.body = body;
-
-    console.dir(body);
+    this.ball = body;
 
     return body;
   };
@@ -100,8 +100,36 @@ define(['box2d'], function(Box2D) {
    * @param {number} deltaTime Time step that the world should progress.
    */
   exports.prototype.step = function(deltaTime) {
+    this.ball.ApplyForceToCenter(
+      new Box2D.b2Vec2(this.horizontalTilt * 500, this.verticalTilt * 500)
+    );
     this.world.Step(deltaTime, 3, 3);
   };
+
+  exports.prototype.tiltLeft = function() {
+    this.horizontalTilt = -1;
+  }
+
+  exports.prototype.tiltRight = function() {
+    this.horizontalTilt = 1;
+  }
+
+  exports.prototype.releaseHorizontalTilt = function() {
+    this.horizontalTilt = 0;
+  }
+
+  exports.prototype.tiltDown = function() {
+    this.verticalTilt = -1;
+  }
+
+  exports.prototype.tiltUp = function() {
+    this.verticalTilt = 1;
+  }
+
+  exports.prototype.releaseVerticalTilt = function() {
+    this.verticalTilt = 0;
+  }
+
 
   return exports;
 });
