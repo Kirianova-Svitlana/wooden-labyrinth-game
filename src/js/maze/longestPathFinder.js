@@ -71,7 +71,7 @@ define([
    *
    * @param {Array.<Array.<Object>>} maze A matrix that represents a maze.
    * @param maze.wall {boolean} Whether it's a wall or a floor.
-   * @param {Object} start kalle
+   * @param {Object} start The start of the path.
    * @param start.y {number} Y coordinate.
    * @param start.x {number} X coordinate.
    * @returns {Array.<Object>} An array of objects with x and y attributes.

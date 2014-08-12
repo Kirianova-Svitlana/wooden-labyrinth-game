@@ -20,7 +20,8 @@ define([
      * @returns {Object} An object with properties to construct a maze. The
      *   attribute `walls` is an array of objects with the attributes x, y,
      *   width and height. The attribute `start` says where the ball should
-     *   start.
+     *   start. The attribute `exitPath` is an array of objects with attributes
+     *   x and y.
      */
     create: function(args) {
       args = _.isUndefined(args) ? {} : args;
@@ -31,7 +32,7 @@ define([
           x: 0,
           y: 0,
         },
-        print: true,
+        print: false,
       });
       var start = {x: 0, y: 0};
       var maze = matrixMaze.generate(
