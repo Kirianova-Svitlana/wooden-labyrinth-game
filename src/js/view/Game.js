@@ -24,8 +24,9 @@ define([
     this.camera.position.set(0, 0, 20);
 
     var canvas = document.getElementById('canvas');
-    this.renderer = new THREE.WebGLRenderer({canvas: canvas});
+    this.renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: true});
     this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.shadowMapEnabled = true;
 
     var floorTexturePath = 'img/wood1.png';
     var wallTexturePath = 'img/wood2.png';
@@ -55,6 +56,7 @@ define([
         width: 1 * this.model.MULTIPLIER,
         height: 10 * this.model.MULTIPLIER,
         texture: new THREE.ImageUtils.loadTexture(wallTexturePath),
+        castShadow: true,
       },
       { // Right wall
         x: 5.5 * this.model.MULTIPLIER,
@@ -63,6 +65,7 @@ define([
         width: 1 * this.model.MULTIPLIER,
         height: 10 * this.model.MULTIPLIER,
         texture: new THREE.ImageUtils.loadTexture(wallTexturePath),
+        castShadow: true,
       },
       { // Upper wall
         x: 0,
@@ -71,6 +74,7 @@ define([
         width: 12 * this.model.MULTIPLIER,
         height: 1 * this.model.MULTIPLIER,
         texture: new THREE.ImageUtils.loadTexture(wallTexturePath),
+        castShadow: true,
       },
       { // Bottom wall
         x: 0,
@@ -79,6 +83,7 @@ define([
         width: 12 * this.model.MULTIPLIER,
         height: 1 * this.model.MULTIPLIER,
         texture: new THREE.ImageUtils.loadTexture(wallTexturePath),
+        castShadow: true,
       },
       { // Floor
         x: 0,
@@ -87,6 +92,7 @@ define([
         width: 10 * this.model.MULTIPLIER,
         height: 10 * this.model.MULTIPLIER,
         texture: new THREE.ImageUtils.loadTexture(floorTexturePath),
+        castShadow: false,
       }
     ];
     _.forEach(walls, function(wall) {
@@ -109,6 +115,8 @@ define([
         wall.y,
         wall.z
       );
+      box.receiveShadow = true;
+      box.castShadow = wall.castShadow;
 
       group.add(box);
     }.bind(this));
@@ -129,7 +137,9 @@ define([
     );
     var material = new THREE.MeshPhongMaterial({color: 0xff0000});
     this.ball = new THREE.Mesh(gemoetry, material);
-    this.ball.position.z = 0;
+    this.ball.position.z = -this.model.MULTIPLIER / 2 + this.model.ball.radius;
+    this.ball.castShadow = true;
+    this.ball.receiveShadow = true;
     group.add(this.ball);
   };
 
@@ -163,6 +173,8 @@ define([
         y - this.model.MULTIPLIER * 5,
         0
       );
+      box.castShadow = true;
+      box.receiveShadow = true;
       group.add(box);
     }.bind(this));
   };
@@ -205,7 +217,19 @@ define([
    */
   exports.prototype.__initLights = function(group) {
     var light = new THREE.DirectionalLight(0xffffff, 1.0);
-    light.position.set(0, 0, 10);
+    light.position.set(10, 10, 60);
+    light.castShadow = true;
+    //light.shadowCameraVisible = true;
+    light.shadowCameraLeft = -12;
+    light.shadowCameraRight = 12;
+    light.shadowCameraTop = 12;
+    light.shadowCameraBottom = -12;
+    light.shadowCameraFar = 100;
+    light.shadowMapWidth = 1024;
+    light.shadowMapHeight = 1024;
+    group.add(light);
+
+    light = new THREE.AmbientLight(0x202020);
     group.add(light);
   };
 

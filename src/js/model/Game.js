@@ -137,7 +137,6 @@ define(['box2d'], function(Box2D) {
 
     return body;
   };
-  /** */
 
   /**
    * Add the exit path.
