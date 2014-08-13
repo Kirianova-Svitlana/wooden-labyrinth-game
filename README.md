@@ -50,3 +50,14 @@ The app depends on the following JavaScript libraries:
   License](https://github.com/mrdoob/three.js/blob/master/LICENSE).
 * [RequireJS](http://requirejs.org/) licensed under the [MIT License or the
   "new" BSD License](https://github.com/jrburke/requirejs/blob/master/LICENSE).
+
+The following art is being used:
+
+* [wood1.png](src/img/wood1.png) from
+  [opengameart.org/node/8721](http://opengameart.org/node/8721), made by
+  [Luke.RUSTLTD](http://opengameart.org/users/lukerustltd) and licensed under
+  [CC0](http://creativecommons.org/publicdomain/zero/1.0/).
+* [wood2.png](src/img/wood2.png) from
+  [opengameart.org/node/8084](http://opengameart.org/node/8084), made by
+  [qubodup](http://opengameart.org/users/qubodup) and licensed under
+  [CC0](http://creativecommons.org/publicdomain/zero/1.0/).
