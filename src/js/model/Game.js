@@ -28,6 +28,44 @@ define(['box2d'], function(Box2D) {
   };
 
   /**
+   * Create container edges.
+   *
+   * @this {module:model/Game}
+   * @param {Object} width
+   * @param {Object} height
+   */
+  exports.prototype.createContainer = function(width, height) {
+    var edges = [
+      {
+        v1: new Box2D.b2Vec2(0, 0),
+        v2: new Box2D.b2Vec2(0, this.MULTIPLIER * height)
+      },
+      {
+        v1: new Box2D.b2Vec2(0, this.MULTIPLIER * height),
+        v2: new Box2D.b2Vec2(this.MULTIPLIER * width, this.MULTIPLIER * height)
+      },
+      {
+        v1: new Box2D.b2Vec2(this.MULTIPLIER * width, this.MULTIPLIER * height),
+        v2: new Box2D.b2Vec2(this.MULTIPLIER * width, 0)
+      },
+      {
+        v1: new Box2D.b2Vec2(this.MULTIPLIER * width, 0),
+        v2: new Box2D.b2Vec2(0, 0)
+      }
+    ];
+    _.forEach(edges, function(edge) {
+      var shape = new Box2D.b2EdgeShape();
+      shape.Set(edge.v1, edge.v2);
+
+      var bd = new Box2D.b2BodyDef();
+      bd.set_type(Box2D.b2_staticBody);
+
+      var body = this.world.CreateBody(bd);
+      body.CreateFixture(shape, 0);
+    }.bind(this));
+  };
+
+  /**
    * Add a wall to the model.
    *
    * @this {module:model/Game}

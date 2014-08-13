@@ -49,6 +49,9 @@ define([
   exports.prototype.__initModel = function(mazeComponents) {
     var gameModel = new GameModel();
 
+    // Create the container edges
+    gameModel.createContainer(10, 10);
+
     // Init ball
     gameModel.createBall({
       x: mazeComponents.start.x,

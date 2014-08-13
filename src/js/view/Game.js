@@ -27,15 +27,91 @@ define([
     this.renderer = new THREE.WebGLRenderer({canvas: canvas});
     this.renderer.setSize(window.innerWidth, window.innerHeight);
 
+    var floorTexturePath = 'img/wood1.png';
+    var wallTexturePath = 'img/wood2.png';
+
     this.labyrinthGroup = new THREE.Object3D();
+    this.__initLabyrinthContainer(
+      this.labyrinthGroup, floorTexturePath, wallTexturePath
+    );
     this.__initBall(this.labyrinthGroup);
-    this.__initWalls(this.labyrinthGroup);
+    this.__initWalls(this.labyrinthGroup, wallTexturePath);
     this.__initExitPath(this.labyrinthGroup);
     this.__initLights(this.scene);
 
     this.scene.add(this.labyrinthGroup);
 
     this.keyInput = new KeyInput();
+  };
+
+  exports.prototype.__initLabyrinthContainer = function(
+    group, floorTexturePath, wallTexturePath
+  ) {
+    var walls = [
+      { // Left wall
+        x: -5.5 * this.model.MULTIPLIER,
+        y: 0,
+        z: 0,
+        width: 1 * this.model.MULTIPLIER,
+        height: 10 * this.model.MULTIPLIER,
+        texture: new THREE.ImageUtils.loadTexture(wallTexturePath),
+      },
+      { // Right wall
+        x: 5.5 * this.model.MULTIPLIER,
+        y: 0,
+        z: 0,
+        width: 1 * this.model.MULTIPLIER,
+        height: 10 * this.model.MULTIPLIER,
+        texture: new THREE.ImageUtils.loadTexture(wallTexturePath),
+      },
+      { // Upper wall
+        x: 0,
+        y: 5.5 * this.model.MULTIPLIER,
+        z: 0,
+        width: 12 * this.model.MULTIPLIER,
+        height: 1 * this.model.MULTIPLIER,
+        texture: new THREE.ImageUtils.loadTexture(wallTexturePath),
+      },
+      { // Bottom wall
+        x: 0,
+        y: -5.5 * this.model.MULTIPLIER,
+        z: 0,
+        width: 12 * this.model.MULTIPLIER,
+        height: 1 * this.model.MULTIPLIER,
+        texture: new THREE.ImageUtils.loadTexture(wallTexturePath),
+      },
+      { // Floor
+        x: 0,
+        y: 0,
+        z: -1 * this.model.MULTIPLIER,
+        width: 10 * this.model.MULTIPLIER,
+        height: 10 * this.model.MULTIPLIER,
+        texture: new THREE.ImageUtils.loadTexture(floorTexturePath),
+      }
+    ];
+    _.forEach(walls, function(wall) {
+      // Create the box gemoetry
+      var gemoetry = new THREE.BoxGeometry(
+        wall.width,
+        wall.height,
+        this.model.MULTIPLIER
+      );
+
+      // Create the material
+      var material = new THREE.MeshPhongMaterial({map: wall.texture});
+      wall.texture.wrapS = wall.texture.wrapT = THREE.RepeatWrapping;
+      wall.texture.repeat.set(wall.width / 2, wall.height / 2);
+
+      // Create the box
+      var box = new THREE.Mesh(gemoetry, material);
+      box.position.set(
+        wall.x,
+        wall.y,
+        wall.z
+      );
+
+      group.add(box);
+    }.bind(this));
   };
 
   /**
@@ -64,23 +140,30 @@ define([
    * @this {module:view/Game}
    * @param {Object3D} group The group that the walls will be added to.
    */
-  exports.prototype.__initWalls = function(group) {
+  exports.prototype.__initWalls = function(group, wallTexturePath) {
     _.forEach(this.model.walls, function(wall) {
       var x = wall.body.GetPosition().get_x();
       var y = wall.body.GetPosition().get_y();
+
+      // Create the box gemoetry
       var gemoetry = new THREE.BoxGeometry(
         wall.width,
         wall.height,
         this.model.MULTIPLIER
       );
-      var material = new THREE.MeshPhongMaterial({color: 0x00ff00});
-      var cube = new THREE.Mesh(gemoetry, material);
-      cube.position.set(
+
+      var texture = new THREE.ImageUtils.loadTexture(wallTexturePath);
+      var material = new THREE.MeshPhongMaterial({color: 0xffffff, map: texture});
+      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(wall.width / 2, wall.height / 2);
+
+      var box = new THREE.Mesh(gemoetry, material);
+      box.position.set(
         x - this.model.MULTIPLIER * 5,
         y - this.model.MULTIPLIER * 5,
         0
       );
-      group.add(cube);
+      group.add(box);
     }.bind(this));
   };
 
@@ -98,12 +181,16 @@ define([
         this.model.MULTIPLIER,
         this.model.MULTIPLIER
       );
-      var material = new THREE.MeshPhongMaterial({color: 0x0000ff});
+      var material = new THREE.MeshPhongMaterial({
+        color: 0x0000ff,
+        transparent: true,
+        opacity: 0.25
+      });
       var cube = new THREE.Mesh(gemoetry, material);
       cube.position.set(
         wall.x - 5 * this.model.MULTIPLIER,
         wall.y - 5 * this.model.MULTIPLIER,
-        -this.model.MULTIPLIER
+        -this.model.MULTIPLIER + 0.01
       );
       group.add(cube);
     }.bind(this));
@@ -117,7 +204,7 @@ define([
    * @param {Object3D} group The group that the lights will be added to.
    */
   exports.prototype.__initLights = function(group) {
-    var light = new THREE.DirectionalLight(0xffffff, 1.5);
+    var light = new THREE.DirectionalLight(0xffffff, 1.0);
     light.position.set(0, 0, 10);
     group.add(light);
   };

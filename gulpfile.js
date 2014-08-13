@@ -21,6 +21,11 @@ gulp.task('html', function() {
     .pipe(gulp.dest('dist'));
 });
 
+gulp.task('assets', function() {
+  return gulp.src('src/img/*')
+    .pipe(gulp.dest('dist/img'));
+});
+
 gulp.task('downloadDependencies', function() {
   plugins.download([
     'http://threejs.org/build/three.min.js',
@@ -42,6 +47,7 @@ gulp.task('watch', function() {
   gulp.watch('gulpfile.js', ['gulp']);
   gulp.watch('src/js/**/*.js', ['js']);
   gulp.watch('src/*.html', ['html']);
+  gulp.watch('src/img/*', ['assets']);
   gulp.watch('dist/**', function() {
     gulp.src('dist/index.html')
       .pipe(plugins.connect.reload());
@@ -61,6 +67,7 @@ gulp.task('default', [
   'downloadDependencies',
   'js',
   'html',
+  'assets',
   'connect',
   'watch',
 ]);
@@ -69,4 +76,5 @@ gulp.task('build', [
   'downloadDependencies',
   'js',
   'html',
+  'assets',
 ]);
