@@ -52,6 +52,9 @@ define([
   /**
    * Update the camera and renderer after the browser's window size has
    * changed.
+   *
+   * @private
+   * @this {module:view/Game}
    */
   exports.prototype.__onWindowResize = function() {
     this.camera.aspect = window.innerWidth / window.innerHeight;
@@ -59,6 +62,12 @@ define([
     this.renderer.setSize(window.innerWidth, window.innerHeight);
   };
 
+  /**
+   * Add the labyrinth container's 4 walls and floor.
+   *
+   * @private
+   * @this {module:view/Game}
+   */
   exports.prototype.__initLabyrinthContainer = function(
     group, floorTexturePath, wallTexturePath
   ) {
