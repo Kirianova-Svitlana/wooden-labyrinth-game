@@ -61,3 +61,7 @@ The following art is being used:
   [opengameart.org/node/8084](http://opengameart.org/node/8084), made by
   [qubodup](http://opengameart.org/users/qubodup) and licensed under
   [CC0](http://creativecommons.org/publicdomain/zero/1.0/).
+* [galvanizedBlue.jpg](src/img/galvanizedBlue.jpg) from
+  [opengameart.org/node/7325](http://opengameart.org/node/7325), made by
+  [bart](http://opengameart.org/users/bart) and licensed under
+  [CC0](http://creativecommons.org/publicdomain/zero/1.0/).
