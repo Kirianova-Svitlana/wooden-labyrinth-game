@@ -30,6 +30,7 @@ define([
 
     var floorTexturePath = 'img/wood1.png';
     var wallTexturePath = 'img/wood2.png';
+    var obstacleTexturePath = 'img/galvanizedBlue.jpg';
 
     this.labyrinthGroup = new THREE.Object3D();
     this.__initLabyrinthContainer(
@@ -38,7 +39,7 @@ define([
     this.__initBall(this.labyrinthGroup);
     this.__initWalls(this.labyrinthGroup, wallTexturePath);
     this.__initExitPath(this.labyrinthGroup);
-    this.__initObstacles(this.labyrinthGroup);
+    this.__initObstacles(this.labyrinthGroup, obstacleTexturePath);
     this.__initLights(this.scene);
 
     this.scene.add(this.labyrinthGroup);
@@ -164,7 +165,7 @@ define([
       );
 
       var texture = new THREE.ImageUtils.loadTexture(wallTexturePath);
-      var material = new THREE.MeshPhongMaterial({color: 0xffffff, map: texture});
+      var material = new THREE.MeshPhongMaterial({map: texture});
       texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
       texture.repeat.set(wall.width / 2, wall.height / 2);
 
@@ -195,7 +196,7 @@ define([
         this.model.MULTIPLIER
       );
       var material = new THREE.MeshPhongMaterial({
-        color: 0x0000ff,
+        color: 0x00ff00,
         transparent: true,
         opacity: 0.25
       });
@@ -215,8 +216,10 @@ define([
    * @private
    * @this {module:view/Game}
    * @param {Object3D} group The group that the obstacles will be added to.
+   * @param {String} obstacleTexturePath Path to the texture that will be used
+   *   for the mesh.
    */
-  exports.prototype.__initObstacles = function(group) {
+  exports.prototype.__initObstacles = function(group, obstacleTexturePath) {
     _.forEach(this.model.obstacles, function(obstacle) {
       var x = obstacle.body.GetPosition().get_x();
       var y = obstacle.body.GetPosition().get_y();
@@ -226,7 +229,8 @@ define([
         obstacle.radius,
         this.model.MULTIPLIER / 2
       );
-      var material = new THREE.MeshPhongMaterial({color: 0x00ff00});
+      var texture = new THREE.ImageUtils.loadTexture(obstacleTexturePath);
+      var material = new THREE.MeshPhongMaterial({map: texture});
       var cylinder = new THREE.Mesh(gemoetry, material);
       cylinder.position.set(
         x - 5 * this.model.MULTIPLIER,
