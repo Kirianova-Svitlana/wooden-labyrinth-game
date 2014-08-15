@@ -135,6 +135,7 @@ define(['box2d'], function(Box2D) {
     fixtureDef.set_density(5.0);
     fixtureDef.set_restitution(0.1);
     body.CreateFixture(fixtureDef);
+    body.SetLinearDamping(0.4);
 
     this.ball = {body: body, radius: radius};
 
