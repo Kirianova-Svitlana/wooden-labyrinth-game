@@ -28,6 +28,8 @@ define([
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.shadowMapEnabled = true;
 
+    window.addEventListener('resize', this.__onWindowResize.bind(this), false);
+
     var floorTexturePath = 'img/wood1.png';
     var wallTexturePath = 'img/wood2.png';
     var obstacleTexturePath = 'img/galvanizedBlue.jpg';
@@ -45,6 +47,16 @@ define([
     this.scene.add(this.labyrinthGroup);
 
     this.keyInput = new KeyInput();
+  };
+
+  /**
+   * Update the camera and renderer after the browser's window size has
+   * changed.
+   */
+  exports.prototype.__onWindowResize = function() {
+    this.camera.aspect = window.innerWidth / window.innerHeight;
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
   };
 
   exports.prototype.__initLabyrinthContainer = function(
