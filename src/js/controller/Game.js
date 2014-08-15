@@ -71,6 +71,12 @@ define([
       });
     }.bind(this));
 
+    // Init obstacles
+    _.forEach(
+      mazeComponents.obstacles,
+      gameModel.createObstacle.bind(gameModel)
+    );
+
     // Store the exit path in the model
     gameModel.addExitPath(_.map(mazeComponents.exitPath, function(pathCell) {
       // Move the coordinate to the center of the cell; see the comment above

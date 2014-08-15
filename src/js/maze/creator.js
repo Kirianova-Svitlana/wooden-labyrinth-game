@@ -6,7 +6,8 @@ define([
   './matrixMaze',
   './longestPathFinder',
   './wallExtractor',
-], function(_, matrixMaze, longestPathFinder, wallExtractor) {
+  './obstaclePlacer',
+], function(_, matrixMaze, longestPathFinder, wallExtractor, obstaclePlacer) {
   'use strict';
 
   var exports = {
@@ -20,8 +21,8 @@ define([
      * @returns {Object} An object with properties to construct a maze. The
      *   attribute `walls` is an array of objects with the attributes x, y,
      *   width and height. The attribute `start` says where the ball should
-     *   start. The attribute `exitPath` is an array of objects with attributes
-     *   x and y.
+     *   start and `exit` says where the goal is. The attribute `exitPath` is
+     *   an array of objects with attributes x and y.
      */
     create: function(args) {
       args = _.isUndefined(args) ? {} : args;
@@ -39,8 +40,13 @@ define([
         _.pick(args, ['width', 'height', 'start', 'print'])
       );
       var exitPath = longestPathFinder.find(maze, start);
+      var exit = _.last(exitPath);
+      var obstacles = obstaclePlacer.place(maze, [start, exit], 20);
       var walls = wallExtractor.extract(maze);
-      return {walls: walls, start: start, exitPath: exitPath};
+      return {
+        walls: walls, start: start, exit: exit, exitPath: exitPath,
+        obstacles: obstacles
+      };
     },
   };
 

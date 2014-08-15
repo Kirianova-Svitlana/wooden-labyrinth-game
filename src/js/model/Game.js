@@ -18,6 +18,9 @@ define(['box2d'], function(Box2D) {
     // Where to store the walls
     this.walls = [];
 
+    // Where to store the obstacles
+    this.obstacles = [];
+
     // Create the world
     var gravity = new Box2D.b2Vec2(0.0, 0.0);
     this.world = new Box2D.b2World(gravity);
@@ -154,6 +157,41 @@ define(['box2d'], function(Box2D) {
         y: pathCell.y * this.MULTIPLIER
       };
     }.bind(this));
+  };
+
+  /**
+   * Create an obstacle.
+   *
+   * @this {module:model/Game}
+   * @param {Object} obstacle
+   * @param {number} obstacle.x X coordinate of the cell the obstacle will be
+   *   placed in.
+   * @param {number} obstacle.y Y coordinate of the cell the obstacle will be
+   *   placed in.
+   * @returns {b2Body} The Box2D body that was created.
+   */
+  exports.prototype.createObstacle = function(obstacle) {
+    var shape = new Box2D.b2CircleShape();
+    // Make the obstacle to half the size of a wall cell
+    var radius = this.MULTIPLIER / 4;
+    shape.set_m_radius(radius);
+
+    var bd = new Box2D.b2BodyDef();
+    bd.set_type(Box2D.b2_staticBody);
+    // Randomly place the pbstacle in one of the cell's corners
+    bd.set_position(new Box2D.b2Vec2(
+      this.MULTIPLIER * (obstacle.x + 0.25 + _.random(0, 1) * 0.5),
+      this.MULTIPLIER * (obstacle.y + 0.25 + _.random(0, 1) * 0.5)
+    ));
+
+    var body = this.world.CreateBody(bd);
+    var fixtureDef = new Box2D.b2FixtureDef();
+    fixtureDef.set_shape(shape);
+    body.CreateFixture(fixtureDef);
+
+    this.obstacles.push({body: body, radius: radius});
+
+    return body;
   };
 
   /**

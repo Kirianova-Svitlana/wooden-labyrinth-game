@@ -38,6 +38,7 @@ define([
     this.__initBall(this.labyrinthGroup);
     this.__initWalls(this.labyrinthGroup, wallTexturePath);
     this.__initExitPath(this.labyrinthGroup);
+    this.__initObstacles(this.labyrinthGroup);
     this.__initLights(this.scene);
 
     this.scene.add(this.labyrinthGroup);
@@ -205,6 +206,37 @@ define([
         -this.model.MULTIPLIER + 0.01
       );
       group.add(cube);
+    }.bind(this));
+  };
+
+  /**
+   * Create the obstacles from the model and add them to `group`.
+   *
+   * @private
+   * @this {module:view/Game}
+   * @param {Object3D} group The group that the obstacles will be added to.
+   */
+  exports.prototype.__initObstacles = function(group) {
+    _.forEach(this.model.obstacles, function(obstacle) {
+      var x = obstacle.body.GetPosition().get_x();
+      var y = obstacle.body.GetPosition().get_y();
+
+      var gemoetry = new THREE.CylinderGeometry(
+        obstacle.radius,
+        obstacle.radius,
+        this.model.MULTIPLIER / 2
+      );
+      var material = new THREE.MeshPhongMaterial({color: 0x00ff00});
+      var cylinder = new THREE.Mesh(gemoetry, material);
+      cylinder.position.set(
+        x - 5 * this.model.MULTIPLIER,
+        y - 5 * this.model.MULTIPLIER,
+        -this.model.MULTIPLIER / 4
+      );
+      cylinder.rotation.x = Math.PI / 2;
+      cylinder.castShadow = true;
+      cylinder.receiveShadow = true;
+      group.add(cylinder);
     }.bind(this));
   };
 
