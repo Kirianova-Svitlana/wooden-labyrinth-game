@@ -21,16 +21,22 @@ gulp.task('html', function() {
     .pipe(gulp.dest('dist'));
 });
 
+gulp.task('assets', function() {
+  return gulp.src('src/img/*')
+    .pipe(gulp.dest('dist/img'));
+});
+
 gulp.task('downloadDependencies', function() {
-  plugins.download([
+  return plugins.download([
     'http://threejs.org/build/three.min.js',
     'https://raw.githubusercontent.com/lodash/lodash/2.4.1/dist/lodash.min.js',
+    'https://raw.githubusercontent.com/kripken/box2d.js/master/box2d.js',
     'http://requirejs.org/docs/release/2.1.14/minified/require.js',
   ]).pipe(gulp.dest('dist/lib'));
 });
 
 gulp.task('connect', function() {
-  plugins.connect.server({
+  return plugins.connect.server({
     root: 'dist',
     livereload: true,
     port: 8000,
@@ -41,6 +47,7 @@ gulp.task('watch', function() {
   gulp.watch('gulpfile.js', ['gulp']);
   gulp.watch('src/js/**/*.js', ['js']);
   gulp.watch('src/*.html', ['html']);
+  gulp.watch('src/img/*', ['assets']);
   gulp.watch('dist/**', function() {
     gulp.src('dist/index.html')
       .pipe(plugins.connect.reload());
@@ -60,12 +67,17 @@ gulp.task('default', [
   'downloadDependencies',
   'js',
   'html',
+  'assets',
   'connect',
   'watch',
-]);
+], function() {
+  gulp.src('src/index.html') // this src gets ignored
+    .pipe(plugins.open('', {url: 'http://localhost:8000'}));
+});
 
 gulp.task('build', [
   'downloadDependencies',
   'js',
   'html',
+  'assets',
 ]);

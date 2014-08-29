@@ -18,7 +18,8 @@
     "gulp-download": "0.0.1",
     "gulp-jsdoc": "^0.1.4",
     "gulp-jshint": "^1.8.3",
-    "gulp-load-plugins": "^0.5.3"
+    "gulp-load-plugins": "^0.5.3",
+    "gulp-open": "^0.2.8"
   },
   "private": true
 }
