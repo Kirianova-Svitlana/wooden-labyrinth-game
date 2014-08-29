@@ -27,7 +27,7 @@ gulp.task('assets', function() {
 });
 
 gulp.task('downloadDependencies', function() {
-  plugins.download([
+  return plugins.download([
     'http://threejs.org/build/three.min.js',
     'https://raw.githubusercontent.com/lodash/lodash/2.4.1/dist/lodash.min.js',
     'https://raw.githubusercontent.com/kripken/box2d.js/master/box2d.js',
@@ -36,7 +36,7 @@ gulp.task('downloadDependencies', function() {
 });
 
 gulp.task('connect', function() {
-  plugins.connect.server({
+  return plugins.connect.server({
     root: 'dist',
     livereload: true,
     port: 8000,
@@ -70,7 +70,10 @@ gulp.task('default', [
   'assets',
   'connect',
   'watch',
-]);
+], function() {
+  gulp.src('src/index.html') // this src gets ignored
+    .pipe(plugins.open('', {url: 'http://localhost:8000'}));
+});
 
 gulp.task('build', [
   'downloadDependencies',
