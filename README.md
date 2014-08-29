@@ -1,5 +1,8 @@
 # Wooden Labyrinth Game
 
+Play the game at: <http://matachi.github.io/wooden-labyrinth-game/>  
+JSDoc: <http://matachi.github.io/wooden-labyrinth-game/doc/>
+
 Author: Daniel "MaTachi" Jonsson  
 License: [MIT License](LICENSE.md)
 
